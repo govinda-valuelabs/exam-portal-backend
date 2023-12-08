@@ -1,40 +1,24 @@
-import UserModel from '../model/user.model.js';
-import bcrypt from 'bcrypt';
-import * as config from '../config/config.js';
+import QuestionModel from '../model/question.model.js';
 
-class UserController {
-    async getUsers(req, res) {
-        const data = await UserModel.find();
-        const users = [];
-
-        data.forEach((d) => {
-            users.push({
-                _id: d._id,
-                name: d.name,
-                email: d.email
-            })
-        });
-        
+class QuestionController {
+    async getquestions(req, res) {
+        const questions = await QuestionModel.find();
         res.status(200);
-        res.json(users);
+        res.json(questions);
     }
     async getUser(req, res) {
         const { id } = req.params.id;
-        const data = UserModel.finById(id);
+        const data = QuestionModel.finById(id);
         if (data) {
-            const user = {name: data.name, email:data.email}
             res.status(200);
-            res.json(user);
-        } else {
-            res.status(404);
-            res.json({message: 'User not found!'})
+            res.json(data)
         }
     }
     async create(req, res) {
         try {
             const {name, email, password} = req.body;
             const hasPassword = await bcrypt.hash(password, config.default.salt);
-            const result = await UserModel.create({name, email, password: hasPassword});
+            const result = await QuestionModel.create({name, email, password: hasPassword});
             res.status(201);
             res.send({ ...result, message: 'User was inserted successfully'});
         } catch (error) {
@@ -44,16 +28,8 @@ class UserController {
     }
     async update(req, res) {
         try {
-            const {name, email, password} = req.body;
-            const data = {name, email};
-            
-            if (password) {
-                const hasPassword = await bcrypt.hash(password, config.default.salt);
-                data['password'] = hasPassword;
-            }
-
             const id = req.params.id
-            await UserModel.finByIdAndUpdate(id, data);
+            await QuestionModel.finByIdAndUpdate(id, req.body);
             res.status(201);
             res.send({ message: 'OK', success: true});
         } catch (error) {
@@ -64,7 +40,7 @@ class UserController {
     async delete(req, res) {
         try {
             const id = req.params.id;
-            await UserModel.delete(id);
+            await QuestionModel.delete(id);
             res.status(201);
             res.send({ message: 'User was deleted successfully'});
         } catch (error) {
@@ -74,4 +50,4 @@ class UserController {
     }
 }
 
-export default UserController;
+export default QuestionController;

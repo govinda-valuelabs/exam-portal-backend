@@ -1,0 +1,4 @@
+export default {
+    secret: "OCdsVst94iOkq5YzDaqUgXeXY53t+3o9FP6tTcgpRC/TLsoCvVrNVxy1P7gJEOiprAHz6K+b4PINSufqK8zTNBN5qWkK7fA3HRvsBLwYhbxPqkK9Ve/z7jGzwk/Mqg9n8pJyhndpcbrwRrc8d4yfH59DhaBm2cMA8s1eCH3JxHzb8hSl5yjXkBShmez9+AlkiUGC4b9AvcJ85pShPk8yL/DvFKIyCU0HwxfmoRDunh8OSd0EXb/v45HEGYvp/N7pqz4hS/CeSfsNdHCMZKbd9gEna7ADpytQQQOLZZq/6X+dW0ejIHtg/0erhjRAhifYzH/0yb1oCzW2zw1Xfu3lsA==",
+    salt: 10
+}

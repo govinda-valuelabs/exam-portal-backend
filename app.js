@@ -2,8 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
+import MongoDB from './config/mongodb.js';
 
 dotenv.config();
+// Connecting database
+const mongodb = new MongoDB();
+mongodb.connect();
 
 const app = express();
 
