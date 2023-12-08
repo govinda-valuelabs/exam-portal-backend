@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as dotenv from 'dotenv';
 import MongoDB from './config/mongodb.js';
+import router from './routes/index.js';
 
 dotenv.config();
 // Connecting database
@@ -19,7 +20,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
+app.use('/', router);
 
 app.get('/', (req, res) => {
     res.json({message: 'Welcome to Exam Portal Backend!'});

@@ -1,8 +1,22 @@
 import StudentModel from '../model/student.model.js';
 import bcrypt from 'bcrypt';
 import * as config from '../config/config.js';
+import Auth from '../middleware/auth.js';
 
 class StudentController {
+    async login(req, res) {
+        const auth = new Auth();
+        const { studentEmail, password } = req.body;
+        const { status, token, name, email } = await auth.veryfyStudentLogin(studentEmail, password);
+        res.status(status);
+        res.json({token, name, email});
+    }
+    async logout(req, res) {
+        const auth = new Auth();
+        await auth.studentLogout();
+        res.status(200);
+        res.json({message: 'Successfully logged out'});
+    }
     async getStudents(req, res) {
         const data = await StudentModel.find();
         const students = [];

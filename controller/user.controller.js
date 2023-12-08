@@ -1,8 +1,22 @@
 import UserModel from '../model/user.model.js';
 import bcrypt from 'bcrypt';
 import * as config from '../config/config.js';
+import Auth from '../middleware/auth.js';
 
 class UserController {
+    async login(req, res) {
+        const auth = new Auth();
+        const { userEmail, password } = req.body;
+        const { status, token, name, email } = await auth.veryfyUserLogin(userEmail, password);
+        res.status(status);
+        res.json({token, name, email});
+    }
+    async logout(req, res) {
+        const auth = new Auth();
+        await auth.userLogout();
+        res.status(200);
+        res.json({message: 'Successfully logged out'});
+    }
     async getUsers(req, res) {
         const data = await UserModel.find();
         const users = [];
