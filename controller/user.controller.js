@@ -34,7 +34,7 @@ class UserController {
     }
     async getUser(req, res) {
         const { id } = req.params.id;
-        const data = UserModel.finById(id);
+        const data = await UserModel.findById(id);
         if (data) {
             const user = {name: data.name, email:data.email}
             res.status(200);
@@ -68,7 +68,7 @@ class UserController {
             }
 
             const id = req.params.id
-            await UserModel.finByIdAndUpdate(id, data);
+            await UserModel.findByIdAndUpdate(id, data);
             res.status(201);
             res.send({ message: 'OK', success: true});
         } catch (error) {

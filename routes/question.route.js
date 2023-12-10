@@ -7,7 +7,7 @@ const question = new QuestionController();
 questionRouter.get('/', question.getQuestions);
 questionRouter.get('/:id', question.getQuestion);
 questionRouter.post('/', question.create);
-questionRouter.patch('/', question.update);
+questionRouter.patch('/:id', question.update);
 questionRouter.delete('/:id', question.delete);
 
 export default questionRouter;

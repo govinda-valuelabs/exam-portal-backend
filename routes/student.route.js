@@ -9,7 +9,7 @@ studentRouter.get('/logout', student.logout);
 studentRouter.get('/', student.getStudents);
 studentRouter.get('/:id', student.getStudent);
 studentRouter.post('/', student.create);
-studentRouter.patch('/', student.update);
+studentRouter.patch('/:id', student.update);
 studentRouter.delete('/:id', student.delete);
 
 export default studentRouter;

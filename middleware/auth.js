@@ -7,7 +7,9 @@ import StudentModel from '../model/student.model.js';
 export default class Auth {
     async veryfyUserLogin(email, password) {
         try {
+            console.log('email ', email);
             const user = await UserModel.findOne({ email });
+            console.log('user ', user);
             if (!user) {
                 return { status: 404, message: 'User not found!'}
             }

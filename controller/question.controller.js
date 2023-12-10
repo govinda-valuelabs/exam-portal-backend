@@ -8,7 +8,7 @@ class QuestionController {
     }
     async getQuestion(req, res) {
         const { id } = req.params.id;
-        const data = QuestionModel.finById(id);
+        const data = await QuestionModel.findById(id);
         if (data) {
             res.status(200);
             res.json(data)
@@ -29,7 +29,7 @@ class QuestionController {
     async update(req, res) {
         try {
             const id = req.params.id
-            await QuestionModel.finByIdAndUpdate(id, req.body);
+            await QuestionModel.findByIdAndUpdate(id, req.body);
             res.status(201);
             res.send({ message: 'OK', success: true});
         } catch (error) {

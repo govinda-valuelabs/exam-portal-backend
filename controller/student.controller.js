@@ -32,8 +32,8 @@ class StudentController {
         res.json(students);
     }
     async getStudent(req, res) {
-        const { id } = req.params.id;
-        const data = StudentModel.finById(id);
+        const { id } = req.params;
+        const data = await StudentModel.findById(id);
         if (data) {
             const student = {name: data.name, email:data.email}
             res.status(200);
@@ -66,7 +66,7 @@ class StudentController {
             }
 
             const id = req.params.id
-            await StudentModel.finByIdAndUpdate(id, data);
+            await StudentModel.findByIdAndUpdate(id, data);
             res.status(201);
             res.send({ message: 'OK', success: true});
         } catch (error) {
