@@ -6,8 +6,9 @@ const questionSchema = new Schema({
     },
     answers: [String],
     answer: {
-        type: String, required
-    }
+        type: String, required: true
+    },
+    status: String // Not Opened, Opened, Attempted
 });
 
 const QuestionModel = model.questions || model('question', questionSchema);

@@ -45,6 +45,7 @@ class UserController {
         }
     }
     async create(req, res) {
+        console.log('req.body ', req.body);
         try {
             const {name, email, password} = req.body;
             const hasPassword = await bcrypt.hash(password, config.default.salt);

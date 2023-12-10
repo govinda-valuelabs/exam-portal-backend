@@ -1,12 +1,12 @@
 import QuestionModel from '../model/question.model.js';
 
 class QuestionController {
-    async getquestions(req, res) {
+    async getQuestions(req, res) {
         const questions = await QuestionModel.find();
         res.status(200);
         res.json(questions);
     }
-    async getUser(req, res) {
+    async getQuestion(req, res) {
         const { id } = req.params.id;
         const data = QuestionModel.finById(id);
         if (data) {
