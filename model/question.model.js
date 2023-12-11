@@ -4,7 +4,7 @@ const questionSchema = new Schema({
     title: {
         type: String, required: true
     },
-    answers: [String],
+    options: [String],
     answer: {
         type: String, required: true
     },

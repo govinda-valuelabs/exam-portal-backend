@@ -77,8 +77,8 @@ class StudentController {
     async delete(req, res) {
         try {
             const id = req.params.id;
-            await StudentModel.delete(id);
-            res.status(201);
+            await StudentModel.deleteOne({_id: id });
+            res.status(204);
             res.send({ message: 'User was deleted successfully'});
         } catch (error) {
             res.status(401);

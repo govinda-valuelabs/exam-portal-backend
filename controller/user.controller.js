@@ -79,7 +79,7 @@ class UserController {
     async delete(req, res) {
         try {
             const id = req.params.id;
-            await UserModel.delete(id);
+            await UserModel.deleteOne({_id: id });
             res.status(201);
             res.send({ message: 'User was deleted successfully'});
         } catch (error) {

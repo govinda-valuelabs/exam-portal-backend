@@ -40,7 +40,7 @@ class QuestionController {
     async delete(req, res) {
         try {
             const id = req.params.id;
-            await QuestionModel.delete(id);
+            await QuestionModel.deleteOne({_id: id });
             res.status(201);
             res.send({ message: 'User was deleted successfully'});
         } catch (error) {
