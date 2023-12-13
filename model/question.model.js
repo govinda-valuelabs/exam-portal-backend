@@ -7,10 +7,9 @@ const questionSchema = new Schema({
     options: [Object],
     answer: {
         type: String, required: true
-    },
-    status: String // Not Opened, Opened, Attempted
+    }
 });
 
-const QuestionModel = model.questions || model('question', questionSchema);
+const QuestionModel = model('question', questionSchema);
 
 export default QuestionModel;

@@ -7,7 +7,7 @@ class UserController {
     async login(req, res) {
         const auth = new Auth();
         const { userEmail, password } = req.body;
-        const { status, token, name, email } = await auth.veryfyUserLogin(userEmail, password);
+        const { status, token, name, email } = await auth.authenticateUser(userEmail, password);
         res.status(status);
         res.json({token, name, email});
     }

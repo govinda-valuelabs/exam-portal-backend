@@ -1,4 +1,5 @@
 import ExamModel from '../model/exam.model.js';
+import QuestionModel from '../model/question.model.js'
 
 class ExamController {
     async getExams(req, res) {
@@ -14,11 +15,45 @@ class ExamController {
             res.json(data)
         }
     }
+    async apple(req, res) {
+        res.status(200);
+        res.json({ message: 'hello' })
+    }
+    async questions(req, res) {
+        const questions = await QuestionModel.find();
+
+        const data = [];
+        questions.forEach((q) => {
+            data.push({
+                _id: q._id,
+                title: q.title,
+                options: q.options
+            })
+        })
+        res.status(200);
+        res.json({...data});
+    }
+    async getExamStatus(req, res) {
+        try {
+            const { studentId } = req.params;
+            const result = await ExamModel.findOne({ studentId });
+            res.status(200);
+            res.json(result);
+        } catch (error) {
+            res.status(404);
+            res.json({message: 'No exam attended by this student'});
+        }
+    }
     async create(req, res) {
         try {
-            const data = req.body;
-            const result = await ExamModel.create(data);
-            res.status(201);
+            const { studentId } = req.body;
+            let result = await ExamModel.findOne({ studentId });
+            if (!result) {
+                result = await ExamModel.create({ studentId });
+                res.status(201);
+            } else {
+                res.status(200);
+            }
             res.send({ ...result, message: 'Exam was inserted successfully'});
         } catch (error) {
             res.status(401);

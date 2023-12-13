@@ -4,12 +4,11 @@ const examSchema = new Schema({
     studentId: {
         type: String, required: true
     },
-    questions: [Object],
-    start: {
-      type: Date, default: Date.now()
+    questions: {
+      type: Array(Object)
     },
-    time: {
-      type: Number, default: 1200 // seconds
+    startTime: {
+      type: Date, default: Date.now()
     }
 });
 

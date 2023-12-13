@@ -6,6 +6,7 @@ const student = new StudentController();
 
 studentRouter.post('/login', student.login);
 studentRouter.get('/logout', student.logout);
+studentRouter.post('/is-logged', student.isLogged);
 studentRouter.get('/', student.getStudents);
 studentRouter.get('/:id', student.getStudent);
 studentRouter.post('/', student.create);

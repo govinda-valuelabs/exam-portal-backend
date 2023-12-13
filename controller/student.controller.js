@@ -7,9 +7,16 @@ class StudentController {
     async login(req, res) {
         const auth = new Auth();
         const { studentEmail, password } = req.body;
-        const { status, token, name, email } = await auth.veryfyStudentLogin(studentEmail, password);
+        const { status, token, name, email, id } = await auth.authenticateStudent(studentEmail, password);
         res.status(status);
-        res.json({token, name, email});
+        res.json({token, name, email, id});
+    }
+    async isLogged(req, res) {
+        const auth = new Auth();
+        const { token } = req.body;
+        const { status, message, data } = await auth.verifyStudentLogin(token);
+        res.status(status);
+        res.json({ message, ...data });
     }
     async logout(req, res) {
         const auth = new Auth();
@@ -32,13 +39,18 @@ class StudentController {
         res.json(students);
     }
     async getStudent(req, res) {
-        const { id } = req.params;
-        const data = await StudentModel.findById(id);
-        if (data) {
-            const student = {name: data.name, email:data.email}
-            res.status(200);
-            res.json(student);
-        } else {
+        try {
+            const { id } = req.params;
+            const data = await StudentModel.findById(id);
+            if (data) {
+                const student = {name: data.name, email:data.email}
+                res.status(200);
+                res.json(student);
+            } else {
+                res.status(404);
+                res.json({message: 'Student not found!'})
+            }
+        } catch (error) {
             res.status(404);
             res.json({message: 'Student not found!'})
         }

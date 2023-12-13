@@ -5,11 +5,9 @@ import UserModel from '../model/user.model.js';
 import StudentModel from '../model/student.model.js';
 
 export default class Auth {
-    async veryfyUserLogin(email, password) {
+    async authenticateUser(email, password) {
         try {
-            console.log('email ', email);
             const user = await UserModel.findOne({ email });
-            console.log('user ', user);
             if (!user) {
                 return { status: 404, message: 'User not found!'}
             }
@@ -31,12 +29,16 @@ export default class Auth {
             return {status: 408, message: 'Error timeout'}
         }
     }
+    async verifyUserLogin(token) {
+        const verifyToken = jwt.verify(token, config.default.secret);
+        console.log('verifyToken ', verifyToken);
+    }
     async userLogout() {
         const JWT_SECRET = config.default.secret;
         await jwt.sign({ type: 'user'}, JWT_SECRET,{ expiresIn: '0h' })
     }
 
-    async veryfyStudentLogin(email, password) {
+    async authenticateStudent(email, password) {
         try {
             const student = await StudentModel.findOne({ email });
             if (!student) {
@@ -53,11 +55,22 @@ export default class Auth {
                     expiresIn: '1h'
                 })
 
-                return {status: 200, token: studentToken, name: student.name, email: student.email}
+                return {status: 200, token: studentToken, name: student.name, email: student.email, id: student._id}
             } 
-            return {status: 401, token: '', name: '', email: '', message: 'Invalid password'}
+            return {status: 401, token: '', name: '', email: '', id: '', message: 'Invalid password'}
         } catch (error) {
-            return {status: 408, token: '', name: '', email: '', message: 'Error timeout'}
+            return {status: 408, token: '', name: '', email: '', id: '', message: 'Error timeout'}
+        }
+    }
+    async verifyStudentLogin(token) {
+        try {
+            const verifyToken = jwt.verify(token, config.default.secret);
+            
+            if (verifyToken) {
+                return { status: 200, message: 'Authorized', data: { studentId: verifyToken.studentId, name: verifyToken.name, email: verifyToken.email } }
+            }
+        } catch (error) {
+            return { status: 401, message: error.message, data: {} }
         }
     }
     async studentLogout() {

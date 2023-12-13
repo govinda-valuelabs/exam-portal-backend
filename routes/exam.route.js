@@ -5,8 +5,10 @@ const examRouter = express.Router();
 const exam = new ExamController();
 
 examRouter.get('/', exam.getExams);
+examRouter.get('/status/:studentId', exam.getExamStatus);
+examRouter.get('/question', exam.questions);
+examRouter.post('/start', exam.create);
 examRouter.get('/:id', exam.getExam);
-examRouter.post('/', exam.create);
 examRouter.patch('/:id', exam.update);
 examRouter.delete('/:id', exam.delete);
 
