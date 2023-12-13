@@ -15,9 +15,15 @@ class ExamController {
             res.json(data)
         }
     }
-    async apple(req, res) {
-        res.status(200);
-        res.json({ message: 'hello' })
+    async question(req, res) {
+        const { id } = req.params.questionId;
+        const question = await QuestionModel.findById(id);
+
+        if (question) {
+            const data = { _id: question._id, title: question.title, options: question.options }
+            res.status(200);
+            res.json(data)
+        }
     }
     async questions(req, res) {
         const questions = await QuestionModel.find();

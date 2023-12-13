@@ -9,6 +9,9 @@ const examSchema = new Schema({
     },
     startTime: {
       type: Date, default: Date.now()
+    },
+    limit: {
+      type: Number, default: 1200000 // 20*60*1000
     }
 });
 
