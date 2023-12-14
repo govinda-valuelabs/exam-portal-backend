@@ -52,7 +52,7 @@ export default class Auth {
                     email: student.email,
                     type: 'student'
                 }, JWT_SECRET, {
-                    expiresIn: '1h'
+                    expiresIn: '2h'
                 })
 
                 return {status: 200, token: studentToken, name: student.name, email: student.email, id: student._id}

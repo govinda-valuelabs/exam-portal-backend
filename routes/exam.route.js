@@ -6,6 +6,7 @@ const exam = new ExamController();
 
 examRouter.get('/', exam.getExams);
 examRouter.get('/status/:studentId', exam.getExamStatus);
+examRouter.get('/question/:questionId', exam.question);
 examRouter.get('/question', exam.questions);
 examRouter.post('/start', exam.create);
 examRouter.get('/:id', exam.getExam);

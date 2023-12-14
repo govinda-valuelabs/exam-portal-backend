@@ -16,13 +16,23 @@ class ExamController {
         }
     }
     async question(req, res) {
-        const { id } = req.params.questionId;
-        const question = await QuestionModel.findById(id);
+        const { questionId } = req.params;
+        const { studentId } = req.query;
 
+        const question = await QuestionModel.findById(questionId);
+        const exam = await ExamModel.findOne({ studentId });
         if (question) {
-            const data = { _id: question._id, title: question.title, options: question.options }
+            let selected = null;
+            if (exam?.questions) {
+                const find = exam.questions.find((q) => q.questionId == questionId && q.status == 'attempted');
+                selected = find?.optionId;
+            }
+            const data = { _id: question._id, title: question.title, options: question.options, selected }
             res.status(200);
             res.json(data)
+        } else {
+            res.status(200);
+            res.json(null)
         }
     }
     async questions(req, res) {
@@ -49,6 +59,33 @@ class ExamController {
             res.status(404);
             res.json({message: 'No exam attended by this student'});
         }
+    }
+    async updateExam(req, res) {
+        const { studentId } = req.params;
+        const { questionId, status, optionId } = req.body;
+        const result = await ExamModel.findOne({ studentId });
+        if (result.questions.length > 0) {
+            let questionFound = false; 
+            for (let q in result.questions) {
+                if (result.questions[q].questionId == questionId) {
+                    questionFound = true;
+                    if (status == 'attempted') {
+                        result.questions[q] = {questionId, status, optionId};
+                        result.save();
+                    }
+                }
+            }
+
+            if (!questionFound) {
+                result.questions[result.questions.length] = {questionId, status, optionId};
+                result.save();
+            }
+        } else {
+            result.questions[result.questions.length] = {questionId, status, optionId};
+            result.save();
+        }
+        res.status(200);
+        res.json({message: 'Success'});
     }
     async create(req, res) {
         try {

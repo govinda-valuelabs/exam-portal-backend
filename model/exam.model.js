@@ -5,7 +5,7 @@ const examSchema = new Schema({
         type: String, required: true
     },
     questions: {
-      type: Array(Object)
+      type: [Object]
     },
     startTime: {
       type: Date, default: Date.now()
