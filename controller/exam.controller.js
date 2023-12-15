@@ -3,7 +3,7 @@ import QuestionModel from '../model/question.model.js'
 
 class ExamController {
     async getExams(req, res) {
-        const exams = await ExamModel.find();
+        const exams = await ExamModel.find().populate('studentId');
         res.status(200);
         res.json(exams);
     }
@@ -18,16 +18,21 @@ class ExamController {
     async question(req, res) {
         const { questionId } = req.params;
         const { studentId } = req.query;
-
+        console.log('student id ', studentId);
         const question = await QuestionModel.findById(questionId);
         const exam = await ExamModel.findOne({ studentId });
+        
         if (question) {
             let selected = null;
             if (exam?.questions) {
                 const find = exam.questions.find((q) => q.questionId == questionId && q.status == 'attempted');
                 selected = find?.optionId;
             }
-            const data = { _id: question._id, title: question.title, options: question.options, selected }
+            const first = await QuestionModel.findOne().sort({ _id: 1}).limit(1);
+            const last = await QuestionModel.findOne().sort({ _id: -1}).limit(1);
+            const isFirst = first._id == questionId;
+            const isLast = last._id == questionId;
+            const data = { _id: question._id, title: question.title, options: question.options, selected, isFirst, isLast }
             res.status(200);
             res.json(data)
         } else {

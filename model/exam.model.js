@@ -2,19 +2,19 @@ import { Schema, model } from "mongoose";
 
 const examSchema = new Schema({
     studentId: {
-        type: String, required: true
+        type: Schema.Types.ObjectId, ref: 'student'
     },
     questions: {
       type: [Object]
     },
     startTime: {
-      type: Date, default: Date.now()
+      type: Date, default: Date.now('Asia/Kolkata')
     },
     limit: {
       type: Number, default: 1200000 // 20*60*1000
     }
 });
 
-const ExamModel = model.exams || model('exam', examSchema);
+const ExamModel = model('exam', examSchema);
 
 export default ExamModel;

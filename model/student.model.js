@@ -12,6 +12,6 @@ const studentSchema = new Schema({
     }
 });
 
-const StudentModel = model.students || model('student', studentSchema);
+const StudentModel = model('student', studentSchema);
 
 export default StudentModel;
