@@ -8,7 +8,7 @@ class ExamController {
         res.json(exams);
     }
     async getExam(req, res) {
-        const { id } = req.params.id;
+        const { id } = req.params;
         const data = await ExamModel.findById(id);
         if (data) {
             res.status(200);
@@ -57,7 +57,7 @@ class ExamController {
     async getExamStatus(req, res) {
         try {
             const { studentId } = req.params;
-            const result = await ExamModel.findOne({ studentId });
+            const result = await ExamModel.findOne({ studentId }).populate('questions');
             res.status(200);
             res.json(result);
         } catch (error) {
@@ -95,9 +95,10 @@ class ExamController {
     async create(req, res) {
         try {
             const { studentId } = req.body;
+            const startTime = Date.now('Asia/Kolkata');
             let result = await ExamModel.findOne({ studentId });
             if (!result) {
-                result = await ExamModel.create({ studentId });
+                result = await ExamModel.create({ studentId, startTime });
                 res.status(201);
             } else {
                 res.status(200);

@@ -33,7 +33,7 @@ class UserController {
         res.json(users);
     }
     async getUser(req, res) {
-        const { id } = req.params.id;
+        const { id } = req.params;
         const data = await UserModel.findById(id);
         if (data) {
             const user = {name: data.name, email:data.email}
@@ -45,7 +45,6 @@ class UserController {
         }
     }
     async create(req, res) {
-        console.log('req.body ', req.body);
         try {
             const {name, email, password} = req.body;
             const hasPassword = await bcrypt.hash(password, config.default.salt);

@@ -12,7 +12,10 @@ const examSchema = new Schema({
     },
     limit: {
       type: Number, default: 1200000 // 20*60*1000
-    }
+    },
+    endTime: {
+      type: Date, default: null
+    }, 
 });
 
 const ExamModel = model('exam', examSchema);
