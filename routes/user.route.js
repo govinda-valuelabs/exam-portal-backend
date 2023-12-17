@@ -6,6 +6,7 @@ const user = new UserController();
 
 userRouter.post('/signin', user.login);
 userRouter.get('/signout', user.logout);
+userRouter.post('/is-logged', user.isLogged);
 userRouter.get('/', user.getUsers);
 userRouter.get('/:id', user.getUser);
 userRouter.post('/', user.create);
