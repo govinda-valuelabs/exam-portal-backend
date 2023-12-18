@@ -11,6 +11,13 @@ class UserController {
         res.status(status);
         res.json({token, name, email});
     }
+    async isLogged(req, res) {
+        const auth = new Auth();
+        const { token } = req.body;
+        const { status, message, data } = await auth.verifyUserLogin(token);
+        res.status(status);
+        res.json({ message, ...data });
+    }
     async logout(req, res) {
         const auth = new Auth();
         await auth.userLogout();

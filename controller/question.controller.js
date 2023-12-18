@@ -1,14 +1,15 @@
 import QuestionModel from '../model/question.model.js';
+import OptionModel from '../model/option.model.js';
 
 class QuestionController {
     async getQuestions(req, res) {
-        const questions = await QuestionModel.find();
+        const questions = await QuestionModel.find().populate('answer');
         res.status(200);
         res.json(questions);
     }
     async getQuestion(req, res) {
         const { id } = req.params;
-        const data = await QuestionModel.findById(id);
+        const data = await QuestionModel.findById(id).populate('options');
         if (data) {
             res.status(200);
             res.json(data)
@@ -17,9 +18,22 @@ class QuestionController {
     async create(req, res) {
         try {
             const data = req.body;
-            const result = await QuestionModel.create(data);
+            const question = await QuestionModel.create({ title: data.title, answer: data.answer });
+
+            data.options.forEach((o, i) => {
+                data.options[i].question = question._id
+            });
+            
+            const options = await OptionModel.insertMany(data.options);
+            const optionIds = options.map((option) => {
+                return option._id;
+            });
+            
+            question.options = optionIds;
+            question.save();
+            
             res.status(201);
-            res.send({ ...result, message: 'Question was inserted successfully'});
+            res.send({ ...question, message: 'Question was inserted successfully'});
         } catch (error) {
             res.status(401);
             res.send({ message: 'Error in inserting question: ' + error.message});

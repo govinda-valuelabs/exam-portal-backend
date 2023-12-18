@@ -19,7 +19,7 @@ export default class Auth {
                     email: user.email,
                     type: 'user'
                 }, JWT_SECRET, {
-                    expiresIn: '1h'
+                    expiresIn: '5h'
                 })
 
                 return {status: 200, token: userToken, name: user.name, email: user.email}
@@ -30,9 +30,16 @@ export default class Auth {
         }
     }
     async verifyUserLogin(token) {
-        const verifyToken = jwt.verify(token, config.default.secret);
-        console.log('verifyToken ', verifyToken);
+        try {
+            const verifyToken = jwt.verify(token, config.default.secret);
+            if (verifyToken) {
+                return { status: 200, message: 'Authorized', data: { userId: verifyToken.userId, name: verifyToken.name, email: verifyToken.email } }
+            }
+        } catch (error) {
+            return { status: 401, message: error.message, data: {} }
+        }
     }
+
     async userLogout() {
         const JWT_SECRET = config.default.secret;
         await jwt.sign({ type: 'user'}, JWT_SECRET,{ expiresIn: '0h' })
