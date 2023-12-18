@@ -18,7 +18,6 @@ class ExamController {
     async question(req, res) {
         const { questionId } = req.params;
         const { studentId } = req.query;
-        console.log('student id ', studentId);
         const question = await QuestionModel.findById(questionId);
         const exam = await ExamModel.findOne({ studentId });
         
