@@ -12,6 +12,7 @@ class UserController {
         res.json({token, name, email});
     }
     async isLogged(req, res) {
+        console.log('govinda mandal');
         const auth = new Auth();
         const { token } = req.body;
         const { status, message, data } = await auth.verifyUserLogin(token);
