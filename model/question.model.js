@@ -7,6 +7,11 @@ const questionSchema = new Schema({
     options: Array,
     answer: {
         type: String
+    },
+    type: String,
+    document: {
+        type: Boolean,
+        default: false
     }
 });
 
