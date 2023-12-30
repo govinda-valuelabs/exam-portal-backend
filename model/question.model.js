@@ -9,7 +9,7 @@ const questionSchema = new Schema({
         type: String
     },
     type: String,
-    document: {
+    attachment: {
         type: Boolean,
         default: false
     }
