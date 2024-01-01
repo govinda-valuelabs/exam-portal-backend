@@ -18,7 +18,12 @@ class QuestionController {
     async create(req, res) {
         try {
             const data = req.body;
-            const question = await QuestionModel.create({ title: data.title, answer: data.answer });
+            const question = await QuestionModel.create({
+                title: data.title,
+                answer: data.answer,
+                type: data.type,
+                attachment: data.attachment
+            });
 
             data.options.forEach((o, i) => {
                 data.options[i].question = question._id

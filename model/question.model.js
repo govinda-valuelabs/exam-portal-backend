@@ -8,7 +8,10 @@ const questionSchema = new Schema({
     answer: {
         type: String
     },
-    type: String,
+    type: {
+        type: String,
+        default: 'radio'
+    },
     attachment: {
         type: Boolean,
         default: false
