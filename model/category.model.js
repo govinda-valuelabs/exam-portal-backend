@@ -6,6 +6,9 @@ const categorySchema = new Schema({
     },
     questions: [{
         type: Schema.Types.ObjectId, ref: 'question'
+    }],
+    exams: [{
+        type: Schema.Types.ObjectId, ref: 'exam'
     }]
 });
 

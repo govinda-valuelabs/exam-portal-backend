@@ -3,7 +3,7 @@ import QuestionModel from '../model/question.model.js'
 
 class ExamController {
     async getExams(req, res) {
-        const exams = await ExamModel.find().populate('studentId');
+        const exams = await ExamModel.find().populate('studentId').populate('category');
         res.status(200);
         res.json(exams);
     }
@@ -93,11 +93,10 @@ class ExamController {
     }
     async create(req, res) {
         try {
-            const { studentId } = req.body;
-            const startTime = Date.now('Asia/Kolkata');
+            const { category, studentId } = req.body;
             let result = await ExamModel.findOne({ studentId });
             if (!result) {
-                result = await ExamModel.create({ studentId, startTime });
+                result = await ExamModel.create({ category, studentId });
                 res.status(201);
             } else {
                 res.status(200);

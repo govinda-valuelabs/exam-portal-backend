@@ -4,14 +4,14 @@ const examSchema = new Schema({
     studentId: {
         type: Schema.Types.ObjectId, ref: 'student'
     },
+    category: {
+      type: Schema.Types.ObjectId, ref: 'category'
+    },
     questions: {
       type: [Object]
     },
     startTime: {
-      type: Date, default: Date.now('Asia/Kolkata')
-    },
-    limit: {
-      type: Number, default: 1200000 // 20*60*1000
+      type: Date, default: null
     },
     endTime: {
       type: Date, default: null
