@@ -4,6 +4,9 @@ const questionSchema = new Schema({
     title: {
         type: String, required: true
     },
+    category: {
+        type: Schema.Types.ObjectId, ref: 'category'
+    },
     options: Array,
     answer: {
         type: String

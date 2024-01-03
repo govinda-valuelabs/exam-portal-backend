@@ -3,7 +3,7 @@ import OptionModel from '../model/option.model.js';
 
 class QuestionController {
     async getQuestions(req, res) {
-        const questions = await QuestionModel.find().populate('answer');
+        const questions = await QuestionModel.find().populate('category');
         res.status(200);
         res.json(questions);
     }
@@ -17,25 +17,7 @@ class QuestionController {
     }
     async create(req, res) {
         try {
-            const data = req.body;
-            const question = await QuestionModel.create({
-                title: data.title,
-                answer: data.answer,
-                type: data.type,
-                attachment: data.attachment
-            });
-
-            data.options.forEach((o, i) => {
-                data.options[i].question = question._id
-            });
-            
-            const options = await OptionModel.insertMany(data.options);
-            const optionIds = options.map((option) => {
-                return option._id;
-            });
-            
-            question.options = optionIds;
-            question.save();
+            const question = await QuestionModel.create(req.body);
             
             res.status(201);
             res.send({ ...question, message: 'Question was inserted successfully'});
@@ -59,7 +41,7 @@ class QuestionController {
         try {
             const id = req.params.id;
             await QuestionModel.deleteOne({_id: id });
-            res.status(201);
+            res.status(204);
             res.send({ message: 'Question was deleted successfully'});
         } catch (error) {
             res.status(401);
