@@ -1,3 +1,4 @@
+import AnswerModel from '../model/answer.model.js';
 import ExamModel from '../model/exam.model.js';
 import QuestionModel from '../model/question.model.js'
 
@@ -40,23 +41,32 @@ class ExamController {
         }
     }
     async questions(req, res) {
-        const questions = await QuestionModel.find();
-
+        const { studentId } = req.params;
+        const exam = await ExamModel.findOne({ studentId });
         const data = [];
-        questions.forEach((q) => {
-            data.push({
-                _id: q._id,
-                title: q.title,
-                options: q.options
+
+        try {
+            
+            const questions = await QuestionModel.find({ category: exam.category });
+    
+            questions.forEach((q) => {
+                data.push({
+                    _id: q._id,
+                    title: q.title,
+                    options: q.options
+                })
             })
-        })
+            
+        } catch (error) {
+            
+        }
         res.status(200);
         res.json({...data});
     }
     async getExamStatus(req, res) {
         try {
             const { studentId } = req.params;
-            const result = await ExamModel.findOne({ studentId }).populate('questions');
+            const result = await ExamModel.findOne({ studentId }).populate('questions').populate('category');
             res.status(200);
             res.json(result);
         } catch (error) {
@@ -67,26 +77,19 @@ class ExamController {
     async updateExam(req, res) {
         const { studentId } = req.params;
         const { questionId, status, optionId } = req.body;
-        const result = await ExamModel.findOne({ studentId });
-        if (result.questions.length > 0) {
-            let questionFound = false; 
-            for (let q in result.questions) {
-                if (result.questions[q].questionId == questionId) {
-                    questionFound = true;
-                    if (status == 'attempted') {
-                        result.questions[q] = {questionId, status, optionId};
-                        result.save();
-                    }
-                }
-            }
 
-            if (!questionFound) {
-                result.questions[result.questions.length] = {questionId, status, optionId};
-                result.save();
+        const result = await ExamModel.findOne({ studentId });
+
+        if (result) {
+            let questionFound = false; 
+            const answer = await AnswerModel.findOne({ questionId, examId: result._id });
+            if (answer) {
+                answer.status = status
+                answer.answer = answer
+                answer.save();
+            } else {
+                await AnswerModel.create({ status, answer: optionId, question: questionId, exam: result._id });
             }
-        } else {
-            result.questions[result.questions.length] = {questionId, status, optionId};
-            result.save();
         }
         res.status(200);
         res.json({message: 'Success'});

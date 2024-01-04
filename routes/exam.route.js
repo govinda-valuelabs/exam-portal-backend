@@ -8,7 +8,7 @@ examRouter.get('/', exam.getExams);
 examRouter.post('/', exam.create);
 examRouter.get('/status/:studentId', exam.getExamStatus);
 examRouter.get('/question/:questionId', exam.question);
-examRouter.get('/question', exam.questions);
+examRouter.get('/questions/:studentId', exam.questions);
 // examRouter.post('/start', exam.create);
 examRouter.get('/:id', exam.getExam);
 examRouter.patch('/:id', exam.update);

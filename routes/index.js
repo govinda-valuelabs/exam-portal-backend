@@ -5,6 +5,8 @@ import questionRouter from './question.route.js';
 import examRouter from './exam.route.js';
 import attemptRouter from './attempt.route.js';
 import categoryRouter from './category.route.js';
+import answerRouter from './answer.route.js';
+import feedbackRouter from './feedback.route.js';
 
 const router = express.Router();
 
@@ -14,5 +16,7 @@ router.use('/question', questionRouter);
 router.use('/exam', examRouter);
 router.use('/attempt', attemptRouter);
 router.use('/category', categoryRouter);
+router.use('/answer', answerRouter);
+router.use('/feedback', feedbackRouter);
 
 export default router;

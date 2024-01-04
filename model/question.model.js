@@ -7,7 +7,9 @@ const questionSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId, ref: 'category'
     },
-    options: Array,
+    options: [{
+        type: Schema.Types.ObjectId, ref: 'option'
+    }],
     answer: {
         type: String
     },
