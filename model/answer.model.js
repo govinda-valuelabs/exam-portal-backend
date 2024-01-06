@@ -6,6 +6,9 @@ const answerSchema = new Schema({
     answer: {
         type: String
     },
+    option: [{
+        type: Schema.Types.ObjectId, ref: 'option'
+    }],
     question: {
         type: Schema.Types.ObjectId, ref: 'question'
     },

@@ -76,16 +76,25 @@ class ExamController {
     }
     async updateExam(req, res) {
         const { studentId } = req.params;
-        const { questionId, status, optionId } = req.body;
+        const { questionId, status, optionId, text, type } = req.body;
 
         const result = await ExamModel.findOne({ studentId });
 
         if (result) {
-            let questionFound = false; 
-            const answer = await AnswerModel.findOne({ questionId, examId: result._id });
+            const answer = await AnswerModel.findOne({ question: questionId, exam: result._id });
             if (answer) {
-                answer.status = status
-                answer.answer = answer
+                
+                if (status == 'attempted') {
+                    answer.status = status
+                }
+
+                if (type == 'checkbox') {
+                    answer.option = answer.option ? [...answer.option, optionId] : [optionId] 
+                } else if (['radio', 'boolean'].includes(type)) {
+                    answer.option = [optionId]
+                }
+
+                answer.answer = text
                 answer.save();
             } else {
                 await AnswerModel.create({ status, answer: optionId, question: questionId, exam: result._id });

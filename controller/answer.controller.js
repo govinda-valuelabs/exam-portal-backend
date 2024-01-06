@@ -29,7 +29,7 @@ class AnswerController {
         const { questionId, studentId } = req.params;
         try {
             const exam = await ExamModel.findOne({ studentId });
-            const data = await AnswerModel.findOne({ question: questionId, exam: exam._id });
+            const data = await AnswerModel.findOne({ question: questionId, exam: exam._id }).populate('option');
             
             res.status(200);
             res.json(data)
@@ -40,7 +40,6 @@ class AnswerController {
     }
     async create(req, res) {
         const { status, type, question, studentId, answer } = req.body;
-        // const file = req.files;
         const exam = await ExamModel.findOne({ studentId });
         try {
             const result = await AnswerModel.create({ examId: exam._id, status, type, question, answer });

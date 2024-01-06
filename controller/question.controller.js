@@ -10,12 +10,11 @@ class QuestionController {
     async getQuestion(req, res) {
         const { id } = req.params;
         const question = await QuestionModel.findById(id).populate('options');
-
         const first = await QuestionModel.findOne().sort({ _id: 1}).limit(1);
         const last = await QuestionModel.findOne().sort({ _id: -1}).limit(1);
         const isFirst = first._id == id;
         const isLast = last._id == id;
-        const data = { _id: question._id, title: question.title, type: question.type, options: question.options, isFirst, isLast }
+        const data = { _id: question._id, category: question.category, title: question.title, type: question.type, options: question.options, attachment: question.attachment, isFirst, isLast }
 
         if (data) {
             res.status(200);
