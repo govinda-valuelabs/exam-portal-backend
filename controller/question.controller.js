@@ -1,5 +1,6 @@
 import QuestionModel from '../model/question.model.js';
 import OptionModel from '../model/option.model.js';
+import ExamModel from '../model/exam.model.js';
 
 class QuestionController {
     async getQuestions(req, res) {
@@ -7,11 +8,19 @@ class QuestionController {
         res.status(200);
         res.json(questions);
     }
+    async getQuestionsByCategory(req, res) {
+        const { category } = req.params;
+        const questions = await QuestionModel.find({ category }).populate('category').populate('options');
+        res.status(200);
+        res.json(questions);
+    }
     async getQuestion(req, res) {
         const { id } = req.params;
+        const { studentId } = req.query;
+        const exam = await ExamModel.findOne({ studentId });
         const question = await QuestionModel.findById(id).populate('options');
-        const first = await QuestionModel.findOne().sort({ _id: 1}).limit(1);
-        const last = await QuestionModel.findOne().sort({ _id: -1}).limit(1);
+        const first = await QuestionModel.findOne({ category: exam.category }).sort({ _id: 1}).limit(1);
+        const last = await QuestionModel.findOne({ category: exam.category }).sort({ _id: -1}).limit(1);
         const isFirst = first._id == id;
         const isLast = last._id == id;
         const data = { _id: question._id, category: question.category, title: question.title, type: question.type, options: question.options, attachment: question.attachment, isFirst, isLast }

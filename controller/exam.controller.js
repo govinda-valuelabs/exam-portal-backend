@@ -10,7 +10,7 @@ class ExamController {
     }
     async getExam(req, res) {
         const { id } = req.params;
-        const data = await ExamModel.findById(id);
+        const data = await ExamModel.findById(id).populate('questions');
         if (data) {
             res.status(200);
             res.json(data)
@@ -81,6 +81,13 @@ class ExamController {
         const result = await ExamModel.findOne({ studentId });
 
         if (result) {
+            const existing = result.questions.find((q) => q == questionId);
+            
+            if (!existing) {
+                result.questions = [...result.questions, questionId];
+                result.save();
+            }
+
             const answer = await AnswerModel.findOne({ question: questionId, exam: result._id });
             if (answer) {
                 

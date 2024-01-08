@@ -43,6 +43,14 @@ class AnswerController {
         const exam = await ExamModel.findOne({ studentId });
         try {
             const result = await AnswerModel.create({ examId: exam._id, status, type, question, answer });
+            
+            const existing = exam.questions.find((q) => q == question);
+            
+            if (!existing) {
+                exam.questions = [...exam.questions, question];
+                exam.save();
+            }
+
             res.status(201);
             res.send({ ...result, message: 'Answer was inserted successfully'});
         } catch (error) {

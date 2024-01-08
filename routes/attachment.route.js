@@ -1,8 +1,6 @@
 import express from 'express';
-import multer from 'multer';
 import AttachmentController from '../controller/attachment.controller.js';
-
-const upload = multer({ dest: '../uploads/' })
+import upload from '../middleware/upload.js';
 
 const attachmentRouter = express.Router();
 const attachment = new AttachmentController();

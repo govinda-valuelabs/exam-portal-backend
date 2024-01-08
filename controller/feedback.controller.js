@@ -9,11 +9,10 @@ class FeedbackController {
 
     async getFeedback(req, res) {
         const { id } = req.params;
+        console.log('feedback id ', id);
         const data = await FeedbackModel.findById(id);
-        if (data) {
-            res.status(200);
-            res.json(data)
-        }
+        res.status(200);
+        res.json(data)
     }
     async getByQuestion(req, res) {
         const { question } = req.params;

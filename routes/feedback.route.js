@@ -1,5 +1,4 @@
 import express from 'express';
-import multer from 'multer';
 import FeedbackController from '../controller/feedback.controller.js';
 
 const feedbackRouter = express.Router();

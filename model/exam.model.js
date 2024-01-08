@@ -8,7 +8,7 @@ const examSchema = new Schema({
       type: Schema.Types.ObjectId, ref: 'category'
     },
     questions: {
-      type: [Object]
+      type: [{type: Schema.Types.ObjectId, ref: 'question'}]
     },
     startTime: {
       type: Date, default: null
