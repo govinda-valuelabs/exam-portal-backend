@@ -6,6 +6,7 @@ const answer = new AnswerController();
 
 answerRouter.get('/:questionId/:studentId', answer.getByQuestion);
 answerRouter.post('/:studentId', answer.getAnswersByExam);
+answerRouter.post('/exam/:examId', answer.getAnswersByExam);
 answerRouter.get('/', answer.getAnswers);
 answerRouter.post('/', answer.create);
 answerRouter.patch('/:id', answer.update);

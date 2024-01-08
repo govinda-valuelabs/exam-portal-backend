@@ -2,17 +2,27 @@ import FeedbackModel from '../model/feedback.model.js'
 
 class FeedbackController {
     async getFeedbacks(req, res) {
-        const feedbacks = await FeedbackModel.find().populate('student').populate('question');
+        const {student, question} = req.body;
+        let data = {};
+        if (student) {
+            data.student = student
+            data.question = question
+        }
+        const feedbacks = await FeedbackModel.find(data).populate('student').populate('question');
         res.status(200);
         res.json(feedbacks);
     }
 
     async getFeedback(req, res) {
         const { id } = req.params;
-        console.log('feedback id ', id);
-        const data = await FeedbackModel.findById(id);
-        res.status(200);
-        res.json(data)
+        try {
+            const data = await FeedbackModel.findById(id).populate('student').populate('question');
+            res.status(200);
+            res.json(data)
+        } catch (error) {
+            res.status(401);
+            res.json({message: 'Error : Bad request - ' + error.message})
+        }
     }
     async getByQuestion(req, res) {
         const { question } = req.params;
@@ -22,19 +32,18 @@ class FeedbackController {
             res.json(feedbacks)
         } catch (error) {
             res.status(401);
-            res.json('Error : Bad request - ', error.message)
+            res.json({message: 'Error : Bad request - ' + error.message})
         }
     }
     async getOneByQuestion(req, res) {
         const { question, student } = req.params;
         try {
             const feedbacks = await FeedbackModel.findOne({ question, student });
-            
             res.status(200);
             res.json(feedbacks)
         } catch (error) {
             res.status(401);
-            res.json('Error : Bad request - ', error.message)
+            res.json({message: 'Error : Bad request - ' + error.message})
         }
     }
     async create(req, res) {

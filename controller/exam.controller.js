@@ -101,7 +101,10 @@ class ExamController {
                     answer.option = [optionId]
                 }
 
-                answer.answer = text
+                if (text) {
+                    answer.answer = text
+                }
+
                 answer.save();
             } else {
                 await AnswerModel.create({ status, answer: optionId, question: questionId, exam: result._id });

@@ -3,7 +3,12 @@ import ExamModel from '../model/exam.model.js';
 
 class AttachmentController {
     async getAttachments(req, res) {
-        const attachments = await AttachmentModel.find();
+        const { exam } = req.body;
+        let data = {};
+        if (exam) {
+            data.exam = exam
+        }
+        const attachments = await AttachmentModel.find(data);
         res.status(200);
         res.json(attachments);
     }
@@ -26,39 +31,28 @@ class AttachmentController {
         }
     }
     async getByQuestion(req, res) {
-        const { questionId, studentId } = req.params;
+        const { questionId, studentId } = req.query;
         try {
             const exam = await ExamModel.findOne({ studentId });
-            const data = await AttachmentModel.findOne({ question: questionId, exam: exam._id }).populate('option');
+            const data = await AttachmentModel.findOne({ question: questionId, exam: exam._id });
             
             res.status(200);
             res.json(data)
         } catch (error) {
             res.status(401);
-            res.json('Error : Bad request - ', error.message)
+            res.json({message: 'Error : Bad request - ' + error.message})
         }
     }
     async create(req, res) {
-        const { status, type, question, studentId, answer } = req.body;
+        const { question, studentId, path } = req.body;
         const exam = await ExamModel.findOne({ studentId });
-        try {
-            const result = await AttachmentModel.create({ examId: exam._id, status, type, question, answer });
+        try {            
+            const result = await AttachmentModel.create({ exam: exam._id, question, path });
             res.status(201);
-            res.send({ ...result, message: 'Answer was inserted successfully'});
+            res.send({ ...result, message: 'Attachment was inserted successfully'});
         } catch (error) {
             res.status(401);
-            res.send({ message: 'Error in inserting answer: ' + error.message});
-        }
-    }
-    async update(req, res) {
-        try {
-            const id = req.params.id
-            await AttachmentModel.findByIdAndUpdate(id, req.body);
-            res.status(201);
-            res.send({ message: 'OK', success: true});
-        } catch (error) {
-            res.status(401);
-            res.send({ message: 'Error in updating: ' + error.message});
+            res.send({ message: 'Error in inserting attachment: ' + error.message});
         }
     }
 }

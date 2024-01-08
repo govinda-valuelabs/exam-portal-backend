@@ -8,11 +8,16 @@ class AnswerController {
         res.json(answers);
     }
     async getAnswersByExam(req, res) {
-        const { studentId } = req.params;
+        const { studentId, examId } = req.params;
         let answers = [];
-        const exam = await ExamModel.findOne({ studentId });
-        if (exam) {
-            answers = await AnswerModel.find({ exam: exam._id });
+        let exam;
+        if (examId) {
+            answers = await AnswerModel.find({ exam: examId }).populate('option');
+        } else {
+            exam = await ExamModel.findOne({ studentId });
+            if (exam) {
+                answers = await AnswerModel.find({ exam: exam._id });
+            }
         }
         res.status(200);
         res.json(answers);
