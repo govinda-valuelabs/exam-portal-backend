@@ -81,6 +81,26 @@ app.get('/get-attachment', async (req, res) => {
         }
 });
 
+app.post('/delete-attachment', async (req, res) => {
+    const { question, studentId } = req.body;
+        try {
+            const exam = await ExamModel.findOne({ studentId });
+            console.log('exam ', exam);
+            const find = await AttachmentModel.findOne({ question, exam: exam._id });
+            if (find && existsSync(__dirname + '/public/' + find.path)) {
+                unlink(__dirname + '/public/' + find.path, (error) => {
+                    console.log('error ', error);
+                    console.log('File ' + __dirname + '/public/' + find.path + ' was deleted!');
+                });
+            }
+            res.status(200);
+            res.json({ message: 'File was deleted successfully!' })
+        } catch (error) {
+            res.status(401);
+            res.json({message: 'Error : Bad request - ' + error.message})
+        }
+});
+
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to Exam Portal Backend!' + ' dirname : ' + dirname });
 });

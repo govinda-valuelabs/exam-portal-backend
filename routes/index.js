@@ -8,6 +8,7 @@ import categoryRouter from './category.route.js';
 import answerRouter from './answer.route.js';
 import feedbackRouter from './feedback.route.js';
 import attachmentRouter from './attachment.route.js';
+import reviewRouter from './review.route.js';
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/category', categoryRouter);
 router.use('/answer', answerRouter);
 router.use('/feedback', feedbackRouter);
 router.use('/attachment', attachmentRouter);
+router.use('/review', reviewRouter);
 
 export default router;

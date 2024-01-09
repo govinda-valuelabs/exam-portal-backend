@@ -6,6 +6,8 @@ class FeedbackController {
         let data = {};
         if (student) {
             data.student = student
+        }
+        if (question) {
             data.question = question
         }
         const feedbacks = await FeedbackModel.find(data).populate('student').populate('question');
