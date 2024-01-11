@@ -30,6 +30,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use('/', router);
 
+app.post('/image-upload', (req, res) => {
+    const image = req.files.file;
+    const timestamps = new Date().valueOf();
+    const path =  'images/' + timestamps + '-' + image.name;
+    try {
+        image.mv(__dirname + '/public/' + path);
+    } catch (error) {
+        console.log('error in upload ', error.message);
+    }
+
+    const imageUrl = 'http://localhost:8080/' + path
+
+    res.status(200);
+    res.send({link: imageUrl})
+})
+
 app.post('/file-upload', async (req, res) => {
     const { attachment } = req.files;
     const { studentId, question } = req.body;

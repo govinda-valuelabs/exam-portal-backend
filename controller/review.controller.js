@@ -46,12 +46,13 @@ class ReviewController {
             if (exam) {
                 // check exisiting
                 const find = await ReviewModel.findOne({ student });
+                let result;
                 if (find) {
                     find.comment = comment
                     find.save();
                 } else {
                     const data = { student, exam: exam._id, comment }
-                    const result = await ReviewModel.create(data);
+                    result = await ReviewModel.create(data);
                 }
                 res.status(201);
                 res.send({ ...result, message: 'Review was inserted successfully'});
