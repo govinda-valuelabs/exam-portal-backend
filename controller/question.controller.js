@@ -75,7 +75,7 @@ class QuestionController {
             let data = [];
             options.forEach((o, i) => {
                 data.push({
-                    question: question._id,
+                    question: id,
                     value: o.value
                 })
             })
