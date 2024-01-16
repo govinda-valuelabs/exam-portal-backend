@@ -16,7 +16,7 @@ class ExportController {
             case 'question':
                 filename = 'List-of-question'
                 headers = [
-                    { header: "Title", key: "title", width: 50, font: { bold: true } },
+                    { header: "Title", key: "title", width: 250, font: { bold: true } },
                     { header: "Category", key: "category", width: 20, font: { bold: true } },
                     { header: "Type", key: "type", width: 10, font: { bold: true } },
                     { header: "Attachment", key: "attachment", width: 10, font: { bold: true } },
@@ -98,19 +98,8 @@ class ExportController {
                     await excelExporter.exportToExcel(items, filename, 'Sheet 1', headers);
                 } else if (type == 'pdf') {
                     filename = filename + '-' + new Date().valueOf() + '.pdf';
-                    const headerArray = [];
-                    const data = [];
                     
-                    headers.forEach((h) => {
-                        headerArray.push(h.header);
-                    });
-
-                    items.forEach((i) => {
-                        const arr = {Title: i.title, Category: i.category, Type: i.type, Attachment: String(i.attachment), Options: i.options };
-                        data.push(arr);
-                    })
-                    
-                    const pdfExporter = new PDFExporter(data, filename, 'List of ' + model, headerArray);
+                    const pdfExporter = new PDFExporter(items, filename, 'List of ' + model, headers);
                     pdfExporter.exportToPdf();
                 }
 
