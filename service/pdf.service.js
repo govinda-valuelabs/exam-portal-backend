@@ -27,21 +27,42 @@ class PDFExporter {
 
   generateTableRows() {
     const marginTop = 120;
-    // let 
-    this.headers.forEach((h) => {
-      this.doc.fontSize(12).text(h.header, h.width, marginTop);
-    });
 
     const keys = this.headers.map(obj => obj['key']);
-    for (let d in this.data) {
-      const positionY = marginTop + (d + 1) * 30;
-      let positionX = 50;
-      let i = 1;
-      for (let k of keys) {
-        this.doc.fontSize(10).text(this.data[d][k], positionX * i, positionY);
-        i ++;
-      }
+    const columns = this.headers.map(h => h['header']);
+    let x = 50;
+    let y = 100;
+    for (let c of columns) {
+      this.doc.fillColor('#009CA3').fontSize(14).text(c, x, y, {
+        width: 100
+      });
+      x = x + 100
     }
+    
+    // Add table rows
+    y = 125;
+    this.data.forEach(row => {
+      x = 50;
+      const values = keys.map(key => row[key]);
+      for (let v of values) {
+        this.doc.fillColor('#000000').fontSize(10).text(v, x, y, {
+          width: 100,
+          align: 'justify'
+        });
+        x = x + 100
+      }
+      y = y + 40;
+    });
+
+    // for (let d in this.data) {
+    //   const positionY = marginTop + (d + 1) * 30;
+    //   let positionX = 50;
+    //   let i = 1;
+    //   for (let k of keys) {
+    //     this.doc.fontSize(10).text(this.data[d][k], positionX * i, positionY).moveDown();
+    //     i ++;
+    //   }
+    // }
   }
 
 
